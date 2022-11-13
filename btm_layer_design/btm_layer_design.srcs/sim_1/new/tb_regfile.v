@@ -20,7 +20,19 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module tb_regfile(
+module tb_regfile();
+    
+    reg [4:0] t_rs1_addr;
+    reg [4:0] t_rs2_addr;
+    reg [4:0] t_rd_addr;
+    reg [31:0] t_rd_data_in;
+    reg t_we;
+    reg t_clk;
+    reg [31:0] t_rs1_data;
+    reg [31:0] t_rs2_data;
+    
+    
 
-    );
+
+
 endmodule
