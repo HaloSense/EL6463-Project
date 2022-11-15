@@ -72,7 +72,7 @@ module tb_regfile();
             // test cases layout:
             // rs1_addr, rs2_addr, rs1_data, rs2_data, we,
             // rd_addr, rd_data_in
-            r = $fscanf(fp, "%b,%b,%b,%b,%b,%b,%b", f_rs1_addr, f_rs2_addr, f_rs1_data, f_rs2_data, we, f_rd_addr, f_rd_data_in);
+            r = $fscanf(fp, "%b,%b,%b,%b,%b,%b,%b", f_rs1_addr, f_rs2_addr, f_rs1_data, f_rs2_data, f_we, f_rd_addr, f_rd_data_in);
             
             // assign values
             t_rs1_addr = f_rs1_addr;
