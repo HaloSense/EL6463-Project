@@ -43,6 +43,9 @@ module regfile(
    
     always@(posedge clk)
     begin
+        // always refresh r0 to all zero (hardwire)
+        registers[0] <= 32'h0; 
+        
         rs1_data <= registers[rs1_addr];
         rs2_data <= registers[rs2_addr];
         
