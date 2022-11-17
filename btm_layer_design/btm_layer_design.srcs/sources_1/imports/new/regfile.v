@@ -50,7 +50,9 @@ module regfile(
         rs2_data <= registers[rs2_addr];
         
         if(we == 1) begin
-            registers[rd_addr] <= rd_data_in;
+            // if input to r0, always set input data to 0
+            if(rd_addr == 5'b00000) registers[rd_addr] <= 32'h0;
+            else    registers[rd_addr] <= rd_data_in;
         end
         else begin
             for (i = 0; i < 32; i = i+1) begin
