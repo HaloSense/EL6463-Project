@@ -38,3 +38,10 @@
 # Python scripts for miscellaneous uses
 !*.py
 
+#################################################
+
+# Other file suffixes
+
+# Auxiliary files in Microsoft Excel 2007~ format
+!*.xlsx
+
