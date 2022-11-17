@@ -27,7 +27,7 @@ module alu(
     // op input structure: {funct7, funct3, opcode}, 7+3+7 = 17 bits
     input wire [16:0] op,
     
-    output reg dout
+    output reg [31:0] dout
     );
     
     wire [6:0] funct7;
@@ -49,6 +49,8 @@ module alu(
             7'b1101111: dout <= din_1 + din_2;
             // JALR
             7'b1100111: dout <= din_1 + din_2;
+            // B-type insts
+            7'b1100011: dout <= din_1 + din_2;
             // LB, LH, LW, LBU, LHU
             7'b0000011: dout <= din_1 + din_2;
             // SB, SH, SW
@@ -72,19 +74,19 @@ module alu(
                     // SLLI
                     3'b001: dout <= din_1 << din_2[4:0];
                     // SRLI, SRAI
-                    3'b101: if(funct7[5] == 1'b1) dout <= $signed(din_1) >>> din_2[4:0];    // SRLI
-                            else dout <= din_1 >> din_2[4:0];   // SRAI
+                    3'b101: if(funct7[5] == 1'b1) dout <= $signed(din_1) >>> din_2[4:0];    // SRAI
+                            else dout <= din_1 >> din_2[4:0];   // SRLI
                     // default case: output doesn't change
                     default: dout <= dout;
                 endcase
             end
-            // Rest of R-insts
+            // Rest of R-type insts
             7'b0110011:
             begin
                 case(funct3)
                     // ADD, SUB
-                    3'b000: if(funct7[5] == 1'b1) dout <= din_1 + din_2;
-                            else dout <= din_1 - din_2;
+                    3'b000: if(funct7[5] == 1'b1) dout <= din_1 - din_2;
+                            else dout <= din_1 + din_2;
                     // SLL
                     3'b001: dout <= din_1 << din_2[4:0];
                     // SLT
@@ -100,8 +102,8 @@ module alu(
                     // SLL
                     3'b001: dout <= din_1 << din_2[4:0];
                     // SRL, SRA
-                    3'b101: if(funct7[5] == 1'b1) dout <= $signed(din_1) >>> din_2[4:0];    // SRL
-                            else dout <= din_1 >> din_2[4:0];   // SRA
+                    3'b101: if(funct7[5] == 1'b1) dout <= $signed(din_1) >>> din_2[4:0];    // SRA
+                            else dout <= din_1 >> din_2[4:0];   // SRL
                     // default case: output doesn't change
                     default: dout <= dout;
                 endcase
