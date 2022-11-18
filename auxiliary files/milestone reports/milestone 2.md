@@ -4,10 +4,11 @@
 
 * Zijie Liu, netID: zl4284
 * Zhouzheng Lu, netID: zl4291
+* Chandra Kiran Narala: cn2255
 
 ## Component designs
 
-### nternal registers
+### Registers
 
 This component is designed and tested by Zijie Liu.
 
@@ -31,7 +32,8 @@ This component is designed and tested by Zijie Liu.
 
 * Testbench design (tb_alu.v)
 
-    The testbench is designed to set the potential inputs (`imm`, `rs1`, `rs2`, `pc`(substituted with a special value of `rs1`)) to some values and see how ALU performs when it gets such inputs for different instructions. The test cases are generated with Python. All supported instructions listed in the project spec file are tested at least once, and all test cases passed.
+    The testbench is designed to set the potential inputs (`imm`, `rs1`, `rs2`, `pc`(a special value of `rs1`)) to some values and see how ALU performs when it gets such inputs for different instructions. The test cases are generated with Python. All supported instructions listed in the project spec file are tested at least once, and all test cases passed.
+
 ### Data Memory
 
 This component is designed and tested by Chandra Kiran Narala
@@ -62,8 +64,8 @@ This component is designed and tested by Zhouzheng Lu
 
 * Component design (pc.v)
 
-     The PC module is a 32-bit synchronous-clear register. When a clock signal named 'clk' rising edge comes, PC will check whether the reset signal named 'clr' is effective, and if it is, the output named 'dout' will be assigned as 0x01000000 which is the start address of instruction memory. If write enable signal `we` is effective, PC read input named 'din' and assign it to 'dout'. 
+     The PC module is a 32-bit synchronous-clear register. When a clock signal named `clk` rising edge comes, PC will check whether the reset signal named `clr` is effective, and if it is, the output named `dout` will be assigned as 0x01000000 which is the start address of instruction memory. If write enable signal `we` is effective, PC read input named `din` and assign it to `dout`. 
 
 * Testbench Design (pc_testbench.v)
      
-     The testbench firstly assigns 'clr'as 0, and see if PC can be reset normally. The testbench then test the behavior when 'we' is effective or not. When behavior is not as expected, the test will stop immediately and display "test failed". If all tests passed, display "All tests passed".
+     The testbench firstly assigns `clr` as 0, and see if PC can be reset normally. The testbench then test the behavior when `we` is effective or not. When behavior is not as expected, the test will stop immediately and display "test failed". If all tests passed, display "All tests passed".
