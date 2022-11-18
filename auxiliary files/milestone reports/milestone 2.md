@@ -31,3 +31,26 @@ This component is designed and tested by Zijie Liu.
 * Testbench design (tb_alu.v)
 
     The testbench is designed to set the potential inputs (`imm`, `rs1`, `rs2`, `pc`(substituted with a special value of `rs1`)) to some values and see how ALU performs when it gets such inputs for different instructions. The test cases are generated with Python. All supported instructions listed in the project spec file are tested at least once, and all test cases passed.
+### Data Memory
+
+This component is designed and tested by Chandra Kiran Narala
+
+* Component Design (DMem.v)
+	
+    The DMem.v module contains the data memory for the processor. Data memory is 4 KB size. It begins at the address 0x80000000. The load from and store to the memory takes place in this module.
+
+* Testbench design (DMem_TB.v)
+
+    It is tested by DMem_TB.v, the tests include reading the N-numbers of team members at special read-only locations address 0x80000000, 0x80000004, 0x80000008 in the data memory and outputs them one by one.
+
+### Instruction Memory
+
+This component is designed and tested by Chandra Kiran Narala
+
+* Component design (IMem.v)
+
+     The IMem.v module is the instruction memory for the processor which is initialized to contain the program to be executed. Instruction memory width is 4 bytes (32-bits), although it is byte-addressed. It is of size 2 KB and addressed by 11 bits. The program is loaded into instruction memory from memory file imem.mem. Instruction and Data Memory accesses are restricted to 4-byte alignment in the NYU-6463-RV32I. 
+
+* Testbench Design (IMem_TB.v)
+     
+     The number of clock cycles taken for all low-level test case testbench by IMem_TB.v is 10 clock cycles. The Testbench checks if the instruction memory or ROM is reading the values that are stored in the desired address locations. After reset it should output instruction at 0x0000000, which is the starting address location for the instruction memory.
