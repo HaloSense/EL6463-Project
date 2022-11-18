@@ -38,6 +38,9 @@
 # Python scripts for miscellaneous uses
 !*.py
 
+# DCP files
+!*.dcp
+
 #################################################
 
 # Other file suffixes
