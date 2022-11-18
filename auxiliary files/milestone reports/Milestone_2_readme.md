@@ -34,6 +34,8 @@ This component is designed and tested by Zijie Liu.
 
     The testbench is designed to set the potential inputs (`imm`, `rs1`, `rs2`, `pc`(a special value of `rs1`)) to some values and see how ALU performs when it gets such inputs for different instructions. The test cases are generated with Python. All supported instructions listed in the project spec file are tested at least once, and all test cases passed.
 
+    my test cases are generated with python scripts in "test cases generation/" folder.
+
 ### Data Memory
 
 This component is designed and tested by Chandra Kiran Narala
