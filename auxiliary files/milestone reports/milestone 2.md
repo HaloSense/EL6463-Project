@@ -3,6 +3,7 @@
 ## Team members:
 
 * Zijie Liu, netID: zl4284
+* Zhouzheng Lu, netID: zl4291
 
 ## Component designs
 
@@ -54,3 +55,15 @@ This component is designed and tested by Chandra Kiran Narala
 * Testbench Design (IMem_TB.v)
      
      The number of clock cycles taken for all low-level test case testbench by IMem_TB.v is 10 clock cycles. The Testbench checks if the instruction memory or ROM is reading the values that are stored in the desired address locations. After reset it should output instruction at 0x0000000, which is the starting address location for the instruction memory.
+
+### Program Counter Register
+
+This component is designed and tested by Zhouzheng Lu
+
+* Component design (pc.v)
+
+     The PC module is a 32-bit synchronous-clear register. When a clock signal named 'clk' rising edge comes, PC will check whether the reset signal named 'clr' is effective, and if it is, the output named 'dout' will be assigned as 0x01000000 which is the start address of instruction memory. If write enable signal `we` is effective, PC read input named 'din' and assign it to 'dout'. 
+
+* Testbench Design (pc_testbench.v)
+     
+     The testbench firstly assigns 'clr'as 0, and see if PC can be reset normally. The testbench then test the behavior when 'we' is effective or not. When behavior is not as expected, the test will stop immediately and display "test failed". If all tests passed, display "All tests passed".
