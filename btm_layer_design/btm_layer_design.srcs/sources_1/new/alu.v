@@ -85,8 +85,8 @@ module alu(
             begin
                 case(funct3)
                     // ADD, SUB
-                    3'b000: if(funct7[5] == 1'b1) dout <= din_1 - din_2;
-                            else dout <= din_1 + din_2;
+                    3'b000: if(funct7 == 7'b0) dout <= din_1 + din_2;
+                            else dout <= din_1 - din_2;
                     // SLL
                     3'b001: dout <= din_1 << din_2[4:0];
                     // SLT
@@ -109,9 +109,9 @@ module alu(
                 endcase
             end
             // FENCE (addi r0, r0, 0)
-            7'b0000111: dout <= 32'd0;
+            7'b0001111: dout <= 32'd0;
             // ECALL, EBREAK
-            7'b1110011: $stop;
+            7'b1110011: dout <= 32'd0;
             // default case: output doesn't change
             default: dout <= dout;
         endcase

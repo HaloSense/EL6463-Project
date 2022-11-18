@@ -23,7 +23,8 @@
 module tb_alu();
     
     // Test input
-    reg [31:0] t_din_1, t_din_2, t_dout;
+    reg [31:0] t_din_1, t_din_2;
+    wire [31:0] t_dout;
     
     // Test output
     reg [16:0] t_op;
@@ -53,7 +54,7 @@ module tb_alu();
         while (! $feof(fp)) begin
             // test cases layout: 
             // din_1, din_2, op, dout
-            r = $fscanf(fp, "%b,%b,%b,%b", f_din_1, f_din_2, f_op, f_out);
+            r = $fscanf(fp, "%b,%b,%b,%b", f_din_1, f_din_2, f_op, f_dout);
             
             // Update the input signals
             t_din_1 = f_din_1;
@@ -63,7 +64,9 @@ module tb_alu();
             #10;
             
             if(t_dout != f_dout) begin
-                $display("Output \"dout\" is incorrect at time %t. Desired: %b, actual: %b", $time, f_dout, t_dout);
+                $display("Output \"dout\" is incorrect at time %t.", $time);
+                $display("Desired: %h, actual: %h", f_dout, t_dout);
+                $display("opcode: %b, funct7: %b, funct3: %b.", f_op[6:0], f_op[16:10], f_op[9:7]);
                 $stop;
             end
         end
