@@ -43,7 +43,7 @@ This component is designed and tested by Chandra Kiran Narala
 
     It is tested by DMem_TB.v, the tests include reading the N-numbers of team members at special read-only locations address 0x80000000, 0x80000004, 0x80000008 in the data memory and outputs them one by one.
 
-### Instrruction Memory
+### Instruction Memory
 
 This component is designed and tested by Chandra Kiran Narala
 
