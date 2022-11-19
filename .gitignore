@@ -50,3 +50,6 @@
 
 # Extra image formats (any image format can be put here)
 !*.jpg
+
+# draw.io diagrams
+!*.drawio
