@@ -48,3 +48,5 @@
 # Auxiliary files in Microsoft Excel 2007~ format
 !*.xlsx
 
+# Extra image formats (any image format can be put here)
+!*.jpg
