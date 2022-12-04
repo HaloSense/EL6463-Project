@@ -37,7 +37,7 @@ module regfile(
     
     initial begin
         for (i = 0; i <32; i = i+1) begin
-            registers[i] <= 32'h0;
+            registers[i] = 32'h0;
         end
     end
    
