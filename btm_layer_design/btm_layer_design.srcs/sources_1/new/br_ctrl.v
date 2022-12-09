@@ -67,7 +67,7 @@ module br_ctrl(
                     if(d1 > d2) bc = 1;
                     else bc = 0;
                 end
-                default: bc = 0;
+                default: bc = 1;
             endcase
         end
         else bc = 1;
