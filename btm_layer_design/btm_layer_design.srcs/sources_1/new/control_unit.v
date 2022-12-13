@@ -26,17 +26,19 @@ module control_unit(
       input wire bc,
       output reg s1,s2,s3,s4,s5,PC_we,regfile_we,IM_rd,DM_rd,
       output reg [16:0] op,
-      output reg [3:0] DM_we,
+      output reg [3:0] DM_we
     );
     
     wire [6:0] funct7;
     wire [2:0] funct3;
     wire [6:0] opcode;
     reg [16:0] gop;
+
     
     assign funct7 = din[31:25];
     assign funct3 = din[14:12];
     assign opcode = din[6:0];
+    
     
     
     initial begin
@@ -54,7 +56,7 @@ module control_unit(
     
     // state indicator reg
     reg [3:0] state = 4'b0000;
-    //reg [3:0] next_state = 4'b0000;
+    reg [3:0] next_state = 4'b0000;
     
     // local parameters for states
     // IF
@@ -90,35 +92,40 @@ module control_unit(
     // opcode=1110011
     parameter [3:0] HALT = 4'b1111;
     
-    /*always@(posedge clk)
+    always@(posedge clk)
     begin
         state <= next_state;
-    end*/
+    end
     
-    always@(posedge clk)
+    always@(din)
+    begin
+        state = IF;
+    end
+    
+    always@(state or din)
     begin
         case(state)
             IF: begin
-                        // initial
-                        /*s1=0;
+                        //initial
+                        s1=0;
                         s2=0;
                         s3=0;
                         s4=0;
-                        s5=0;*/
+                        s5=0;
                         PC_we=0;
                         regfile_we=0;
                         DM_rd=0;
                         DM_we=4'b0000;
                         //instruction fetch
                         IM_rd = 1;
-                        state = ID;
+                        next_state = ID;
                    end
             ID: begin
                         //generate op
-                       gop[16:10] <= funct7;
-                       gop[9:7] <= funct3;
-                       gop[6:0] <= opcode;
-                       state = EX;
+                       gop[16:10] = funct7;
+                       gop[9:7] = funct3;
+                       gop[6:0] = opcode;
+                       next_state = EX;
                     end
              EX: begin
                         case(opcode)
@@ -131,63 +138,63 @@ module control_unit(
                             op=gop;
                             s3=0;
                             s4=1;
-                            state=WB2;
+                            next_state=WB2;
                             end
                             7'b1101111:begin
                             op=gop;
                             s4=1;
                             s3=0;
-                            state=WB3;
+                            next_state=WB3;
                             end
                             7'b1100111:begin
                             op=gop;
                             s4=1;
                             s3=1;
-                            state=WB4;
+                            next_state=WB4;
                             end
                             7'b1100011:begin
                             op=gop;
                             s3=0;
                             s4=1;
-                            state=WB5;
+                            next_state=WB5;
                             end
                             7'b0000011:begin
                             op=gop;
                             s3=1;
                             s4=1;
                             DM_rd=1;
-                            state=WB6;
+                            next_state=WB6;
                             end
                             7'b0100011:begin
                             op=gop;
                             s3=1;
                             s4=1;
                             case(funct3)
-                                3'b000:state=MEM1;
-                                3'b001:state=MEM2;
-                                3'b010:state=MEM3;
+                                3'b000:next_state=MEM1;
+                                3'b001:next_state=MEM2;
+                                3'b010:next_state=MEM3;
                                 endcase
                             end
                             7'b0010011:begin
                             op=gop;
                             s3=1;
                             s4=1;
-                            state=WB7;
+                            next_state=WB7;
                             end
                             7'b0110011:begin
                             op=gop;
                             s3=1;
                             s4=0;
-                            state=WB8;
+                            next_state=WB8;
                             end
                             7'b0001111:begin
                             op=gop;
                             s3=1;
                             s4=1;
-                            state=WB9;
+                            next_state=WB9;
                             end
                             7'b1110011:begin
-                            state=HALT;
+                            next_state=HALT;
                             end
                         endcase
                     end
@@ -197,7 +204,6 @@ module control_unit(
                        regfile_we=1;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               WB2: begin
                        s5=0;
@@ -205,7 +211,6 @@ module control_unit(
                        regfile_we=1;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               WB3: begin
                        s5=0;
@@ -213,7 +218,6 @@ module control_unit(
                        regfile_we=1;
                        s1=1;
                        PC_we=1;
-                       state = IF;
               end
               WB4: begin
                        s5=0;
@@ -221,13 +225,11 @@ module control_unit(
                        regfile_we=1;
                        s1=1;
                        PC_we=1;
-                       state = IF;
               end
               WB5: begin
                        if(bc == 1) s1=1;
                         else s1=0;
                        PC_we=1;
-                       state = IF;
               end
               WB6: begin
                        s5=1;
@@ -235,25 +237,21 @@ module control_unit(
                        regfile_we=1;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               MEM1: begin
                        DM_we=4'b0001;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               MEM2: begin
                        DM_we=4'b0011;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               MEM3: begin
                        DM_we=4'b1111;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               WB7: begin
                        s5=0;
@@ -261,7 +259,6 @@ module control_unit(
                        regfile_we=1;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               WB8: begin
                        s5=0;
@@ -269,7 +266,6 @@ module control_unit(
                        regfile_we=1;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               WB9: begin
                        s5=0;
@@ -277,10 +273,9 @@ module control_unit(
                        regfile_we=1;
                        s1=0;
                        PC_we=1;
-                       state = IF;
               end
               HALT: begin
-                       state = HALT;
+                       next_state = HALT;
               end
     endcase
     end
