@@ -24,11 +24,9 @@ module inst_decode(
     input wire [31:0] inst_in,
     output wire [4:0] rs1_addr,
     output wire [4:0] rs2_addr,
-    output wire [4:0] rd_addr,
-    output wire [31:0] inst_out
+    output wire [4:0] rd_addr
     );
     
-    assign inst_out = inst_in;
     assign rs1_addr = inst_in[19:15];
     assign rs2_addr = inst_in[24:20];
     assign rd_addr = inst_in[11:7];
