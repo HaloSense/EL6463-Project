@@ -41,6 +41,9 @@
 # DCP files
 !*.dcp
 
+# Vivado IP integrator block design file
+!*.bd
+
 #################################################
 
 # Other file suffixes
