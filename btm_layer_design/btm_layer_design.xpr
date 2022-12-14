@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="60" Path="D:/NYU/github/EL6463-Team-Project/btm_layer_design/btm_layer_design.xpr">
+<Project Version="7" Minor="60" Path="C:/Users/chandrakiran/Desktop/Temp/EL6463-Team-Project/btm_layer_design/btm_layer_design.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="a32f409313f5416892b05c9751cfb957"/>
@@ -161,6 +161,14 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/dataext.v">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/immext.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>

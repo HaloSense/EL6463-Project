@@ -49,6 +49,8 @@ module dataext(
              3'b011: dout = {24'h000000, din[7:0]};
              // LHU
              3'b100: dout = {16'h0000, din[15:0]};
+             default:
+             dout = din;
         endcase
         end
     end

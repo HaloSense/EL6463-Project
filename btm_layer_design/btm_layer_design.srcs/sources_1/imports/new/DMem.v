@@ -2,13 +2,12 @@
 //`default_nettype none
 
 // Instruction Memory Size (4KB or 1024 Words)
-`define RAM_LENGTH_WORDS 1024
+`define ROM_LENGTH_WORDS 1024
 
 // Relevant Address bits for 2KB Memory (0 - FFC -> 12 Bits)
-`define RAM_ADDR_BITS 12
+`define ROM_ADDR_BITS 12
 
-//Special ROM Values
-`define STARTING_ADDR_BIT 21
+
 
 `define CHANDRA 15775567
 `define ZIJIE 12345678
@@ -20,90 +19,109 @@ module DMem(
     input wire clk,
     input wire rd,
     input wire [3:0] we,
+    input wire [2:0] func3,
     input wire [31:0] addr_in,
-    input wire [31:0] data_in,
-    output wire [31:0] data_out
+    input wire [31:0] dmem_in,
+    input wire [15:0]   fpga_switch,
+    output wire [15:0]   fpga_LED,
+    output wire [31:0]   dmem_out
 );
 
     // Define Data Memory
-    reg [31:0] ram [0:`RAM_LENGTH_WORDS-1];
+    reg [31:0] rom [0:`ROM_LENGTH_WORDS-1];
+    wire [31:0] dmem_tmp;
+    wire [9:0] rom_addr;
+    reg [31:0] data_out;
+
     
     initial begin
-        $readmemh("dmem.mem", ram); 
+        $readmemh("dmem.mem", rom); 
     end
     
-    // Address Translation divide by 4
-    wire [11:0] addr = (addr_in[`RAM_ADDR_BITS-1:0]>>2);
-
-    reg [31:0] d_out = 'b0;
-
-    always @(posedge clk) begin  
-        if (addr < 12'd1024) begin
-            if (addr_in[`STARTING_ADDR_BIT-1]) begin
-                if (rd) begin
-                    if(addr=='d0)
-                        d_out <= 32'h`CHANDRA;
-                    else if(addr=='d1)
-                        d_out <= 32'h`ZIJIE;
-                    else if(addr=='d2)
-                        d_out <= 32'h`ZHOUZHENG;
-                end
-            end  
-            else begin      
-                if (we[0])
-                    ram[addr][7:0] <= data_in[7:0];
-                if (we[1])
-                    ram[addr][15:8] <= data_in[15:8];                    
-                if (we[2])
-                    ram[addr][23:16] <= data_in[23:16];
-                if (we[3])
-                    ram[addr][31:24] <= data_in[31:24];
-                if (rd)
-                    d_out <= ram[addr];
+    reg [32:0] rom_data;
+    always @(posedge clk) begin
+        if(re)
+            case(addr[3:2])
+                //load N number
+                2'b00: rom_data <=32'd15775567;
+                2'b01: rom_data <=32'd18154443;
+                2'b10: rom_data <=32'd11490728;        
+                default: rom_data <=32'b0;
+            endcase
+    end
+    
+    reg [15:0] LED_temp = 16'hF000;
+    reg [2:0] addr_temp;
+    reg [31:0] board; 
+    always @(posedge clk) begin
+        addr_temp = addr_in[4:2];
+            case(addr_in[4:2])
+                3'b100: if(rd) begin board <= {16'b0, fpga_switch}; end // switches
+                3'b101: 
+                    if(rd) begin board <=  rom[addr_in[11:2]]; end // leds
+            endcase
+    end
+    
+    reg [7:0] dmem_temp [3:0];
+    
+    assign rom_addr = addr_in[11:2]; // 000000001101 will be 0000000011
+    
+    always @(posedge clk) begin
+        case(func3)
+            //to load byte
+            3'b000:
+            begin
+                dmem_temp = dmem_in[7:0];
+                dmem_temp = rom[rom_addr][15:8];
+                dmem_temp = rom[rom_addr][23:16];
+                dmem_temp = rom[rom_addr][31:24];
             end
+            // to load byte
+            3'b100: 
+            begin
+                dmem_temp = dmem_in[7:0];
+                dmem_temp = rom[rom_addr][15:8];
+                dmem_temp = rom[rom_addr][23:16];
+                dmem_temp = rom[rom_addr][31:24];
+            end
+            //to load 2 bytes
+            3'b001 || 3'b101: 
+            begin 
+                dmem_temp = dmem_in[7:0];
+                dmem_temp = dmem_in[15:8];
+                dmem_temp = rom[rom_addr][23:16];
+                dmem_temp = rom[rom_addr][31:24];
+            end
+            // to load 4 byte
+            3'b010: 
+            begin
+                dmem_temp = dmem_in[7:0];
+                dmem_temp = dmem_in[15:8];
+                dmem_temp = dmem_in[23:16];
+                dmem_temp = dmem_in[31:24];
+            end
+        endcase 
+    end
+ 
+    always@(posedge clk) begin
+        if(we_en) begin
+            if (addr[4:2] == 3'b101) begin 
+                rom[rom_addr] <=  dmem_in[15:0]; 
+                LED_temp <= dmem_in[15:0];
+            end
+            rom[rom_addr]    <= {dmem_temp[3], dmem_temp[2], dmem_temp[1], dmem_temp[0]};
         end
     end
-    
-    assign data_out = d_out;
+
+    always@(posedge clk) begin
+        if(re) begin 
+            data_out <= rom[rom_addr];
+        end
+    end
+    assign fpga_LED = LED_temp;
+    assign dmem_out = addr_in[31]? data_out
+                    : addr_in[20]? (addr_in[4]? board : rom_data)
+                    : 'hz;
     
 endmodule
 
-// DMem TCL Simulation Commands
-
-/*
-
-restart
-add_force {/DMem/clk} -radix hex {1 0ns} {0 500ps} -repeat_every 1000ps
-add_force {/DMem/rd} -radix hex {1 0ns}
-run 1ns
-add_force {/DMem/addr_in} -radix hex {00100000 0ns}
-run 2ns
-add_force {/DMem/addr_in} -radix hex {00100004 0ns}
-run 2ns
-add_force {/DMem/addr_in} -radix hex {00100008 0ns}
-run 2ns
-add_force {/DMem/we} -radix bin {0001 0ns}
-add_force {/DMem/addr_in} -radix hex {80000000 0ns}
-add_force {/DMem/data_in} -radix hex {ffffffff 0ns}
-run 1ns
-add_force {/DMem/we} -radix bin {0010 0ns}
-add_force {/DMem/addr_in} -radix hex {80000000 0ns}
-add_force {/DMem/data_in} -radix hex {eeeeeeee 0ns}
-run 1ns
-add_force {/DMem/we} -radix bin {0100 0ns}
-add_force {/DMem/addr_in} -radix hex {80000000 0ns}
-add_force {/DMem/data_in} -radix hex {dddddddd 0ns}
-run 1ns
-add_force {/DMem/we} -radix bin {1000 0ns}
-add_force {/DMem/addr_in} -radix hex {80000000 0ns}
-add_force {/DMem/data_in} -radix hex {cccccccc 0ns}
-run 1ns
-add_force {/DMem/we} -radix bin {1010 0ns}
-add_force {/DMem/addr_in} -radix hex {80000000 0ns}
-add_force {/DMem/data_in} -radix hex {aaaaaaaa 0ns}
-run 1ns
-add_force {/DMem/we} -radix bin {1010 0ns}
-add_force {/DMem/addr_in} -radix hex {00100010 0ns}
-add_force {/DMem/data_in} -radix hex {aaaaaaaa 0ns}
-run 1ns
-*/
