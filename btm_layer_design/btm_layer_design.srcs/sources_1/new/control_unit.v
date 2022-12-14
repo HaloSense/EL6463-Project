@@ -32,27 +32,10 @@ module control_unit(
     wire [6:0] funct7;
     wire [2:0] funct3;
     wire [6:0] opcode;
-    reg [16:0] gop;
 
-    
     assign funct7 = din[31:25];
     assign funct3 = din[14:12];
     assign opcode = din[6:0];
-    
-    
-    
-    initial begin
-        s1=0;
-        s2=0;
-        s3=0;
-        s4=0;
-        s5=0;
-        PC_we=0;
-        regfile_we=0;
-        DM_rd=0;
-        IM_rd=0;
-        DM_we=4'b0000;
-    end
     
     // state indicator reg
     reg [3:0] state = 4'b0000;
@@ -92,192 +75,214 @@ module control_unit(
     // opcode=1110011
     parameter [3:0] HALT = 4'b1111;
     
+    initial begin
+        s1=0;
+        s2=0;
+        s3=0;
+        s4=0;
+        s5=0;
+        PC_we=0;
+        regfile_we=0;
+        DM_rd=0;
+        IM_rd=0;
+        DM_we=4'b0000;
+    end
+
     always@(posedge clk)
     begin
         state <= next_state;
     end
     
+    /*
     always@(din)
     begin
         state = IF;
     end
+    */
     
     always@(state or din)
     begin
         case(state)
             IF: begin
-                        //initial
+                //instruction fetch
+                IM_rd = 1;
+                next_state = ID;
+            end
+            ID: begin
+                //generate op
+                op = {funct7, funct3, opcode};
+                next_state = EX;
+            end
+            EX: begin
+                case(opcode)
+                    7'b0110111: begin   // LUI
+                        // op = gop;
+                        s1 = 0;
+                        s2 = 0;
+                        s4 = 1;
+                        s5 = 1;
+                        next_state = WB1;
+                    end
+                    7'b0010111: begin   // AUIPC
+                        // op = gop;
+                        s1 = 0;
+                        s2 = 0;
+                        s3 = 0;
+                        s4 = 1;
+                        s5 = 1;
+                        next_state = WB2;
+                    end
+                    7'b1101111: begin   // JAL
+                        // op = gop;
+                        s1 = 1;
+                        s2 = 1;
+                        s3 = 0;
+                        s4 = 1;
+                        next_state = WB3;
+                    end
+                    7'b1100111: begin   // JALR
+                        // op = gop;
+                        s1 = 1;
+                        s2 = 1;
+                        s3 = 1;
+                        s4 = 1;
+                        next_state = WB4;
+                    end
+                    7'b1100011: begin   // B-type
+                        // op = gop;
+                        if(bc == 0) s1 = 0;
+                        else s1 = 1;
+                        s3 = 0;
+                        s4 = 1;
+                        next_state = WB5;
+                    end
+                    7'b0000011: begin   // load
+                        // op = gop;
+                        s1 = 0;
+                        s2 = 0;
+                        s3 = 1;
+                        s4 = 1;
+                        s5 = 1;
+                        DM_rd = 1;
+                        next_state = WB6;
+                    end
+                    7'b0100011: begin   // store
+                        // op = gop;
+                        s1 = 0;
+                        s3 = 1;
+                        s4 = 1;
+                        case(funct3)
+                            3'b000: next_state = MEM1;
+                            3'b001: next_state = MEM2;
+                            3'b010: next_state = MEM3;
+                        endcase
+                    end
+                    7'b0010011: begin   // I-type
+                        // op = gop;
+                        s1 = 0;
+                        s2 = 0;
+                        s3 = 1;
+                        s4 = 1;
+                        s5 = 0;
+                        next_state = WB7;
+                    end
+                    7'b0110011: begin    // R-type
+                        // op = gop;
+                        s1 = 0;
+                        s2 = 0;
+                        s3 = 1;
+                        s4 = 0;
+                        s5 = 0;
+                        next_state = WB8;
+                    end
+                    7'b0001111: begin    // FENCE
+                        // op = gop;
+                        s1 = 0;
+                        s2 = 0;
+                        s3 = 1;
+                        s4 = 1;
+                        s5 = 0;
+                        next_state = WB9;
+                    end
+                    7'b1110011: begin    // ECALL/EBREAK
+                        next_state = HALT;
+                    end
+                    default: begin
                         s1=0;
                         s2=0;
                         s3=0;
                         s4=0;
                         s5=0;
-                        PC_we=0;
-                        regfile_we=0;
-                        DM_rd=0;
-                        DM_we=4'b0000;
-                        //instruction fetch
-                        IM_rd = 1;
-                        next_state = ID;
-                   end
-            ID: begin
-                        //generate op
-                       gop[16:10] = funct7;
-                       gop[9:7] = funct3;
-                       gop[6:0] = opcode;
-                       next_state = EX;
+                        next_state = next_state;
                     end
-             EX: begin
-                        case(opcode)
-                            7'b0110111:begin
-                            op=gop;
-                            s4=1;
-                            next_state=WB1;
-                            end
-                            7'b0010111:begin
-                            op=gop;
-                            s3=0;
-                            s4=1;
-                            next_state=WB2;
-                            end
-                            7'b1101111:begin
-                            op=gop;
-                            s4=1;
-                            s3=0;
-                            next_state=WB3;
-                            end
-                            7'b1100111:begin
-                            op=gop;
-                            s4=1;
-                            s3=1;
-                            next_state=WB4;
-                            end
-                            7'b1100011:begin
-                            op=gop;
-                            s3=0;
-                            s4=1;
-                            next_state=WB5;
-                            end
-                            7'b0000011:begin
-                            op=gop;
-                            s3=1;
-                            s4=1;
-                            DM_rd=1;
-                            next_state=WB6;
-                            end
-                            7'b0100011:begin
-                            op=gop;
-                            s3=1;
-                            s4=1;
-                            case(funct3)
-                                3'b000:next_state=MEM1;
-                                3'b001:next_state=MEM2;
-                                3'b010:next_state=MEM3;
-                                endcase
-                            end
-                            7'b0010011:begin
-                            op=gop;
-                            s3=1;
-                            s4=1;
-                            next_state=WB7;
-                            end
-                            7'b0110011:begin
-                            op=gop;
-                            s3=1;
-                            s4=0;
-                            next_state=WB8;
-                            end
-                            7'b0001111:begin
-                            op=gop;
-                            s3=1;
-                            s4=1;
-                            next_state=WB9;
-                            end
-                            7'b1110011:begin
-                            next_state=HALT;
-                            end
-                        endcase
-                    end
-              WB1: begin
-                       s5=0;
-                       s2=0;
-                       regfile_we=1;
-                       s1=0;
-                       PC_we=1;
-              end
-              WB2: begin
-                       s5=0;
-                       s2=0;
-                       regfile_we=1;
-                       s1=0;
-                       PC_we=1;
-              end
-              WB3: begin
-                       s5=0;
-                       s2=1;
-                       regfile_we=1;
-                       s1=1;
-                       PC_we=1;
-              end
-              WB4: begin
-                       s5=0;
-                       s2=1;
-                       regfile_we=1;
-                       s1=1;
-                       PC_we=1;
-              end
-              WB5: begin
-                       if(bc == 1) s1=1;
-                        else s1=0;
-                       PC_we=1;
-              end
-              WB6: begin
-                       s5=1;
-                       s2=0;
-                       regfile_we=1;
-                       s1=0;
-                       PC_we=1;
-              end
-              MEM1: begin
-                       DM_we=4'b0001;
-                       s1=0;
-                       PC_we=1;
-              end
-              MEM2: begin
-                       DM_we=4'b0011;
-                       s1=0;
-                       PC_we=1;
-              end
-              MEM3: begin
-                       DM_we=4'b1111;
-                       s1=0;
-                       PC_we=1;
-              end
-              WB7: begin
-                       s5=0;
-                       s2=0;
-                       regfile_we=1;
-                       s1=0;
-                       PC_we=1;
-              end
-              WB8: begin
-                       s5=0;
-                       s2=0;
-                       regfile_we=1;
-                       s1=0;
-                       PC_we=1;
-              end
-              WB9: begin
-                       s5=0;
-                       s2=0;
-                       regfile_we=1;
-                       s1=0;
-                       PC_we=1;
-              end
-              HALT: begin
-                       next_state = HALT;
-              end
-    endcase
+                endcase
+            end
+            WB1: begin
+                regfile_we = 1;
+                PC_we = 1;
+                next_state = IF;
+            end
+            WB2: begin
+                regfile_we = 1;
+                PC_we = 1;
+                next_state = IF;
+            end
+            WB3: begin
+                regfile_we = 1;
+                PC_we = 1;
+                next_state = IF;
+            end
+            WB4: begin
+                regfile_we=1;
+                PC_we=1;
+                next_state = IF;
+            end
+            WB5: begin
+                PC_we=1;
+                next_state = IF;
+            end
+            WB6: begin
+                regfile_we=1;
+                PC_we=1;
+                next_state = IF;
+            end
+            MEM1: begin
+                DM_we=4'b0001;
+                PC_we=1;
+                next_state = IF;
+            end
+            MEM2: begin
+                DM_we=4'b0011;
+                PC_we=1;
+                next_state = IF;
+            end
+            MEM3: begin
+                DM_we=4'b1111;
+                PC_we=1;
+                next_state = IF;
+            end
+            WB7: begin
+                regfile_we=1;
+                PC_we=1;
+                next_state = IF;
+            end
+            WB8: begin
+                regfile_we=1;
+                PC_we=1;
+                next_state = IF;
+            end
+            WB9: begin
+                regfile_we=1;
+                PC_we=1;
+                next_state = IF;
+            end
+            HALT: begin
+                next_state = HALT;
+            end
+            default: begin
+                next_state = next_state;
+            end
+        endcase
     end
       
 endmodule
