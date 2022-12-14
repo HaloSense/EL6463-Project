@@ -41,76 +41,76 @@ initial begin
      /*din=32'b00000000000000000000000000110111;
      #1000
      if(op != 17'b00000000000110111 | s4!=1 | s5!=0 | s2!=0 | regfile_we!=1 | s1!=0 | PC_we!=1)  begin
-           // $display("WB1 failed.");
-          //$stop;
+           $display("WB1 failed.");
+          $stop;
           end
      din=32'b00000000000000000000000000010111;
      #1000
      if(op != 17'b00000000000010111 | s4!=1 | s3!=0 | s5!=0 | s2!=0 | regfile_we!=1 | s1!=0 | PC_we!=1) begin 
-          //$display("WB2 failed.");
-          //$stop;
+          $display("WB2 failed.");
+          $stop;
           end
      din=32'b00000000000000000000000001101111;
      #1000
      if(op != 17'b00000000001101111 | s4!=1 | s3!=0 | s5!=0 | s2!=1 | regfile_we!=1 | s1!=1 | PC_we!=1) begin
-           // $display("WB3 failed.");
-          //$stop;
+           $display("WB3 failed.");
+          $stop;
           end
      din=32'b00000000000000000000000001100111;
      #1000
      if(op != 17'b00000000001100111 | s4!=1 | s3!=1 | s5!=0 | s2!=1 | regfile_we!=1 | s1!=1 | PC_we!=1) begin
-          //  $display("WB4 failed.");
-          //$stop;
+            $display("WB4 failed.");
+          $stop;
           end
      bc=1;
      din=32'b00000000000000000000000001100011;
      #1000
      if(op != 17'b00000000001100011 | s4!=1 | s3!=0 | s1!=1 | PC_we!=1) begin
-           // $display("WB5.bc1 failed.");
-          //$stop;
+            $display("WB5.bc1 failed.");
+          $stop;
           end
      bc=0;
      din=32'b00000000000000000000000001100011;
      #1000
      if(op != 17'b00000000001100011 | s4!=1 | s3!=0 | s1!=0 | PC_we!=1) begin
-            //$display("WB5.bc0 failed.");
+            $display("WB5.bc0 failed.");
           //$stop;
           end
      din=32'b00000000000000000000000000000011;
      #1000
      if(op != 17'b00000000000000011 | s4!=1 | s3!=1 | DM_rd!=1 | s5!=1 | s2!=0 | s1!=0 | regfile_we!=1 | PC_we!=1) begin
-            //$display("WB6 failed.");
-          //$stop;
+            $display("WB6 failed.");
+          $stop;
           end
      din=32'b00000000000000000000000000100011;
      #1000
      if(op != 17'b00000000000100011 | s4!=1 | s3!=1 | DM_we!=4'b0001 | s1!=0 | PC_we!=1) begin
-            //$display("MEM1 failed.");
-          //$stop;
+            $display("MEM1 failed.");
+          $stop;
           end
      din=32'b00000000000000000001000000100011;
      #1000
      if(op != 17'b00000000010100011 | s4!=1 | s3!=1 | DM_we!=4'b0011 | s1!=0 | PC_we!=1) begin
-            //$display("MEM2 failed.");
-          //$stop;
+            $display("MEM2 failed.");
+          $stop;
           end
      din=32'b00000000000000000010000000100011;
      #1000
      if(op != 17'b00000000100100011 | s4!=1 | s3!=1 | DM_we!=4'b1111 | s1!=0 | PC_we!=1) begin
-            //$display("MEM3 failed.");
-          //$stop;
+            $display("MEM3 failed.");
+          $stop;
           end
      din=32'b00000000000000000000000000010011;
      #1000
      if(op != 17'b00000000000010011 | s4!=1 | s3!=1 | s5!=0 | s2!=0 | s1!=0 | regfile_we!=1 | PC_we!=1) begin
-            //$display("WB7 failed.");
-          //$stop;
+            $display("WB7 failed.");
+          $stop;
           end
      din=32'b00000000000000000000000000110011;
      #1000
      if(op != 17'b00000000000110011 | s4!=0 | s3!=1 | s5!=0 | s2!=0 | s1!=0 | regfile_we!=1 | PC_we!=1) begin
-            //$display("WB8 failed.");
-          //$stop;
+            $display("WB8 failed.");
+          $stop;
           end
      din=32'b00000000000000000000000000001111;
      #1000
