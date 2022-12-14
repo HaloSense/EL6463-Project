@@ -71,34 +71,34 @@ module DMem(
             //to load byte
             3'b000:
             begin
-                dmem_temp = dmem_in[7:0];
-                dmem_temp = rom[rom_addr][15:8];
-                dmem_temp = rom[rom_addr][23:16];
-                dmem_temp = rom[rom_addr][31:24];
+                dmem_temp[0] = dmem_in[7:0];
+                dmem_temp[1] = rom[rom_addr][15:8];
+                dmem_temp[2] = rom[rom_addr][23:16];
+                dmem_temp[3] = rom[rom_addr][31:24];
             end
             // to load byte
             3'b100: 
             begin
-                dmem_temp = dmem_in[7:0];
-                dmem_temp = rom[rom_addr][15:8];
-                dmem_temp = rom[rom_addr][23:16];
-                dmem_temp = rom[rom_addr][31:24];
+                dmem_temp[0] = dmem_in[7:0];
+                dmem_temp[1] = rom[rom_addr][15:8];
+                dmem_temp[2] = rom[rom_addr][23:16];
+                dmem_temp[3] = rom[rom_addr][31:24];
             end
             //to load 2 bytes
             3'b001 || 3'b101: 
             begin 
-                dmem_temp = dmem_in[7:0];
-                dmem_temp = dmem_in[15:8];
-                dmem_temp = rom[rom_addr][23:16];
-                dmem_temp = rom[rom_addr][31:24];
+                dmem_temp[0] = dmem_in[7:0];
+                dmem_temp[1] = dmem_in[15:8];
+                dmem_temp[2] = rom[rom_addr][23:16];
+                dmem_temp[3] = rom[rom_addr][31:24];
             end
             // to load 4 byte
             3'b010: 
             begin
-                dmem_temp = dmem_in[7:0];
-                dmem_temp = dmem_in[15:8];
-                dmem_temp = dmem_in[23:16];
-                dmem_temp = dmem_in[31:24];
+                dmem_temp[0] = dmem_in[7:0];
+                dmem_temp[1] = dmem_in[15:8];
+                dmem_temp[2] = dmem_in[23:16];
+                dmem_temp[3] = dmem_in[31:24];
             end
         endcase 
     end
