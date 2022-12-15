@@ -10,7 +10,7 @@
 
 
 `define CHANDRA 15775567
-`define ZIJIE 12345678
+`define ZIJIE 18154443
 `define ZHOUZHENG 18765432
 
 
