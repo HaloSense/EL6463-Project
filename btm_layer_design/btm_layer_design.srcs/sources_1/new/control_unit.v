@@ -22,6 +22,7 @@
 
 module control_unit(
       input wire clk,
+      input wire rst,
       input wire [31:0] din,
       input wire bc,
       output reg s1,s2,s3,s4,s5,PC_we,regfile_we,IM_rd,DM_rd,
@@ -88,9 +89,10 @@ module control_unit(
         DM_we=4'b0000;
     end
 
-    always@(posedge clk)
+    always@(posedge clk or posedge rst)
     begin
-        state <= next_state;
+        if(rst == 1) next_state <= IF;
+        else if(clk == 1) state <= next_state;
     end
     
     /*
@@ -101,7 +103,7 @@ module control_unit(
     */
     
     always@(state or din)
-    begin
+        begin
         case(state)
             IF: begin
                 //instruction fetch
@@ -120,7 +122,7 @@ module control_unit(
                         s1 = 0;
                         s2 = 0;
                         s4 = 1;
-                        s5 = 1;
+                        s5 = 0;
                         next_state = WB1;
                     end
                     7'b0010111: begin   // AUIPC
@@ -129,7 +131,7 @@ module control_unit(
                         s2 = 0;
                         s3 = 0;
                         s4 = 1;
-                        s5 = 1;
+                        s5 = 0;
                         next_state = WB2;
                     end
                     7'b1101111: begin   // JAL

@@ -38,7 +38,7 @@ end
 
 initial begin
      //in this test,all numbers in instructions are set to 0 except opcode,funct3
-     /*din=32'b00000000000000000000000000110111;
+     din=32'b00000000000000000000000000110111;
      #1000
      if(op != 17'b00000000000110111 | s4!=1 | s5!=0 | s2!=0 | regfile_we!=1 | s1!=0 | PC_we!=1)  begin
            $display("WB1 failed.");
@@ -69,18 +69,18 @@ initial begin
             $display("WB5.bc1 failed.");
           $stop;
           end
+     din=32'b00000000000000000000000000000011;
+     #1000
+     if(op != 17'b00000000000000011 | s4!=1 | s3!=1 | DM_rd!=1 | s5!=1 | s2!=0 | s1!=0 | regfile_we!=1 | PC_we!=1) begin
+            $display("WB6 failed.");
+          $stop;
+          end
      bc=0;
      din=32'b00000000000000000000000001100011;
      #1000
      if(op != 17'b00000000001100011 | s4!=1 | s3!=0 | s1!=0 | PC_we!=1) begin
             $display("WB5.bc0 failed.");
           //$stop;
-          end
-     din=32'b00000000000000000000000000000011;
-     #1000
-     if(op != 17'b00000000000000011 | s4!=1 | s3!=1 | DM_rd!=1 | s5!=1 | s2!=0 | s1!=0 | regfile_we!=1 | PC_we!=1) begin
-            $display("WB6 failed.");
-          $stop;
           end
      din=32'b00000000000000000000000000100011;
      #1000
@@ -115,19 +115,16 @@ initial begin
      din=32'b00000000000000000000000000001111;
      #1000
      if(op != 17'b00000000000001111 | s4!=1 | s3!=1 | s5!=0 | s2!=0 | s1!=0 | regfile_we!=1 | PC_we!=1) begin
-            //$display("WB9 failed.");
-          //$stop;
-          end*/
+            $display("WB9 failed.");
+          $stop;
+          end
      din=32'b00000000000000000000000001110011;
      #200
-     if(op == 17'b00000000001110011) begin
+       begin
             $display("All tests passed.");
             $stop;
         end
-     else begin 
-          $display("HALT failed.");
-          $stop;
-          end
+
  //    #1000 $stop;
  end
 
