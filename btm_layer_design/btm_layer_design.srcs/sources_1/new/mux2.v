@@ -23,10 +23,10 @@
 module mux2(
     input wire [31:0] in_0, in_1,
     input wire sel,
-    output wire [31:0] out
+    output wire [31:0] dout
     );
     
     // when sel=0, choose in_0; else, choose in_1
-    assign out = sel ? in_1:in_0;
+    assign dout = sel ? in_1:in_0;
        
 endmodule

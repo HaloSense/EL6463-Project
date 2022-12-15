@@ -21,10 +21,10 @@
 
 
 module const_add4(
-    input wire [31:0] in,
-    output wire [31:0] out
+    input wire [31:0] din,
+    output wire [31:0] dout
     );
     
-    assign out = in + 4;
+    assign dout = din + 4;
     
 endmodule

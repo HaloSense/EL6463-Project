@@ -9,9 +9,9 @@
 
 
 
-`define CHANDRA 15775567
-`define ZIJIE 18154443
-`define ZHOUZHENG 11490728
+//`define CHANDRA 15775567
+//`define ZIJIE 18154443
+//`define ZHOUZHENG 11490728
 
 
 // Data Memory

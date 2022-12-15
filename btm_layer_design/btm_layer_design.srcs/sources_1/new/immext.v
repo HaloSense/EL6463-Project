@@ -18,11 +18,11 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
+`default_nettype none
 
 module immext(
-    input  [31:0]instr_in,
-    output [31:0] instr_out
+    input  wire [31:0]instr_in,
+    output wire [31:0] instr_out
     );
     reg [31:0]imm_temp;
     wire [6:0] opcode;
@@ -67,7 +67,7 @@ module immext(
                 imm_temp = {{20{instr_in[31]}}, instr_in[31:20]};//ADDI, SLTI, SLTIU, XORI, ORI, ANDI
             end
         default
-            imm_temp <= {32'b0};
+            imm_temp = {32'b0};
 
 endcase
 
