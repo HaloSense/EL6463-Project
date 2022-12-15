@@ -1,7 +1,7 @@
 //Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2022.1.2 (win64) Build 3526262 Mon Apr 18 15:48:16 MDT 2022
-//Date        : Tue Dec 13 23:44:14 2022
+//Date        : Wed Dec 14 23:38:15 2022
 //Host        : DESKTOP-LMT3UBN running 64-bit major release  (build 9200)
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -9,12 +9,19 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=15,numReposBlks=15,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=15,numPkgbdBlks=0,bdsource=USER,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=16,numReposBlks=16,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=16,numPkgbdBlks=0,bdsource=USER,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
-   (clk);
+   (clk,
+    led,
+    rst,
+    sw);
   input clk;
+  output [15:0]led;
+  input rst;
+  input [15:0]sw;
 
-  wire [31:0]DMem_0_data_out;
+  wire [31:0]DMem_0_dmem_out;
+  wire [15:0]DMem_0_fpga_LED;
   wire [31:0]IMem_0_instr_out;
   wire [31:0]alu_0_dout;
   wire br_ctrl_0_bc;
@@ -32,6 +39,7 @@ module design_1
   wire control_unit_0_s4;
   wire control_unit_0_s5;
   wire [31:0]dataext_0_dout;
+  wire [31:0]immext_0_instr_out;
   wire [4:0]inst_decode_0_rd_addr;
   wire [4:0]inst_decode_0_rs1_addr;
   wire [4:0]inst_decode_0_rs2_addr;
@@ -43,15 +51,22 @@ module design_1
   wire [31:0]pc_0_dout;
   wire [31:0]regfile_0_rs1_data;
   wire [31:0]regfile_0_rs2_data;
+  wire rst_1;
+  wire [15:0]sw_1;
 
   assign clk_1 = clk;
+  assign led[15:0] = DMem_0_fpga_LED;
+  assign rst_1 = rst;
+  assign sw_1 = sw[15:0];
   design_1_DMem_0_0 DMem_0
        (.addr_in(alu_0_dout),
         .clk(clk_1),
-        .data_in(regfile_0_rs2_data),
-        .data_out(DMem_0_data_out),
+        .dmem_in(regfile_0_rs2_data),
+        .dmem_out(DMem_0_dmem_out),
+        .fpga_LED(DMem_0_fpga_LED),
+        .fpga_switch(sw_1),
         .rd(control_unit_0_DM_rd),
-        .we(control_unit_0_DM_we));
+        .we(control_unit_0_DM_we[0]));
   design_1_IMem_0_0 IMem_0
        (.addr_in(pc_0_dout),
         .clk(clk_1),
@@ -80,15 +95,19 @@ module design_1
         .din(IMem_0_instr_out),
         .op(control_unit_0_op),
         .regfile_we(control_unit_0_regfile_we),
+        .rst(rst_1),
         .s1(control_unit_0_s1),
         .s2(control_unit_0_s2),
         .s3(control_unit_0_s3),
         .s4(control_unit_0_s4),
         .s5(control_unit_0_s5));
   design_1_dataext_0_0 dataext_0
-       (.din(DMem_0_data_out),
+       (.din(DMem_0_dmem_out),
         .dout(dataext_0_dout),
         .op(control_unit_0_op));
+  design_1_immext_0_0 immext_0
+       (.instr_in(IMem_0_instr_out),
+        .instr_out(immext_0_instr_out));
   design_1_inst_decode_0_0 inst_decode_0
        (.inst_in(IMem_0_instr_out),
         .rd_addr(inst_decode_0_rd_addr),
@@ -112,7 +131,7 @@ module design_1
   design_1_mux2_3_0 mux2_3
        (.dout(mux2_3_dout),
         .in_0(regfile_0_rs2_data),
-        .in_1({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
+        .in_1(immext_0_instr_out),
         .sel(control_unit_0_s4));
   design_1_mux2_4_0 mux2_4
        (.dout(mux2_4_dout),
@@ -121,7 +140,7 @@ module design_1
         .sel(control_unit_0_s5));
   design_1_pc_0_0 pc_0
        (.clk(clk_1),
-        .clr(1'b0),
+        .clr(rst_1),
         .din(mux2_0_dout),
         .dout(pc_0_dout),
         .we(control_unit_0_PC_we));

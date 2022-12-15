@@ -22,6 +22,7 @@
 
 module control_unit(
       input wire clk,
+      input wire rst,
       input wire [31:0] din,
       input wire bc,
       output reg s1,s2,s3,s4,s5,PC_we,regfile_we,IM_rd,DM_rd,
@@ -88,9 +89,10 @@ module control_unit(
         DM_we=4'b0000;
     end
 
-    always@(posedge clk)
+    always@(posedge clk or posedge rst)
     begin
-        state <= next_state;
+        if(rst == 1) state <= IF;
+        else state <= next_state;
     end
     
     /*
