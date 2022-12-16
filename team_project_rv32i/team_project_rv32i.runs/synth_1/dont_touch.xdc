@@ -24,9 +24,6 @@ set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_br
 # IP: bd/design_1/ip/design_1_alu_0_0/design_1_alu_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_alu_0_0 || ORIG_REF_NAME==design_1_alu_0_0} -quiet] -quiet
 
-# IP: bd/design_1/ip/design_1_control_unit_0_0/design_1_control_unit_0_0.xci
-set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_control_unit_0_0 || ORIG_REF_NAME==design_1_control_unit_0_0} -quiet] -quiet
-
 # IP: bd/design_1/ip/design_1_mux2_0_0/design_1_mux2_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_mux2_0_0 || ORIG_REF_NAME==design_1_mux2_0_0} -quiet] -quiet
 
@@ -42,16 +39,19 @@ set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_mu
 # IP: bd/design_1/ip/design_1_mux2_4_0/design_1_mux2_4_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_mux2_4_0 || ORIG_REF_NAME==design_1_mux2_4_0} -quiet] -quiet
 
-# IP: bd/design_1/ip/design_1_DMem_0_0/design_1_DMem_0_0.xci
-set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_DMem_0_0 || ORIG_REF_NAME==design_1_DMem_0_0} -quiet] -quiet
-
 # IP: bd/design_1/ip/design_1_dataext_0_0/design_1_dataext_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_dataext_0_0 || ORIG_REF_NAME==design_1_dataext_0_0} -quiet] -quiet
 
 # IP: bd/design_1/ip/design_1_const_add4_0_0/design_1_const_add4_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_const_add4_0_0 || ORIG_REF_NAME==design_1_const_add4_0_0} -quiet] -quiet
 
+# IP: bd/design_1/ip/design_1_DMem_0_0/design_1_DMem_0_0.xci
+set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_DMem_0_0 || ORIG_REF_NAME==design_1_DMem_0_0} -quiet] -quiet
+
 # IP: bd/design_1/ip/design_1_immext_0_0/design_1_immext_0_0.xci
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_immext_0_0 || ORIG_REF_NAME==design_1_immext_0_0} -quiet] -quiet
+
+# IP: bd/design_1/ip/design_1_control_unit_0_0/design_1_control_unit_0_0.xci
+set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {REF_NAME==design_1_control_unit_0_0 || ORIG_REF_NAME==design_1_control_unit_0_0} -quiet] -quiet
 
 # XDC: e:/GitHub/EL6463-Team-Project/team_project_rv32i/team_project_rv32i.gen/sources_1/bd/design_1/design_1_ooc.xdc
