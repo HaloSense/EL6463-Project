@@ -103,7 +103,7 @@ module control_unit(
     */
     
     always@(state or din)
-    begin
+        begin
         case(state)
             IF: begin
                 //instruction fetch
@@ -122,7 +122,7 @@ module control_unit(
                         s1 = 0;
                         s2 = 0;
                         s4 = 1;
-                        s5 = 1;
+                        s5 = 0;
                         next_state = WB1;
                     end
                     7'b0010111: begin   // AUIPC
@@ -131,7 +131,7 @@ module control_unit(
                         s2 = 0;
                         s3 = 0;
                         s4 = 1;
-                        s5 = 1;
+                        s5 = 0;
                         next_state = WB2;
                     end
                     7'b1101111: begin   // JAL
