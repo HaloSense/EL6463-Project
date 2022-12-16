@@ -91,8 +91,8 @@ module control_unit(
 
     always@(posedge clk or posedge rst)
     begin
-        if(rst == 1) next_state <= IF;
-        else if(clk == 1) state <= next_state;
+        if(rst == 1) state <= IF;
+        else state <= next_state;
     end
     
     /*
