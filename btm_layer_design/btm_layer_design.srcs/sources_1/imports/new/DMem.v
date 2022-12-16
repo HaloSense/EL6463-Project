@@ -106,7 +106,7 @@ module DMem(
     always@(posedge clk) begin
         if(we) begin
             if (addr_in[4:2] == 3'b101) begin 
-                rom[rom_addr] <=  dmem_in[15:0]; 
+                rom[rom_addr] <=  dmem_in; 
                 LED_temp <= dmem_in[15:0];
             end
             rom[rom_addr]    <= dmem_in;
