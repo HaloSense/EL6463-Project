@@ -23,9 +23,9 @@
       "mux2_4": "",
       "dataext_0": "",
       "const_add4_0": "",
-      "DMem_0": "",
       "immext_0": "",
-      "control_unit_0": ""
+      "control_unit_0": "",
+      "DMem_0": ""
     },
     "ports": {
       "clk": {
@@ -512,70 +512,6 @@
           }
         }
       },
-      "DMem_0": {
-        "vlnv": "xilinx.com:module_ref:DMem:1.0",
-        "xci_name": "design_1_DMem_0_0",
-        "xci_path": "ip\\design_1_DMem_0_0\\design_1_DMem_0_0.xci",
-        "inst_hier_path": "DMem_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "DMem",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "user_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "design_1_clk",
-                "value_src": "default_prop"
-              }
-            }
-          },
-          "rd": {
-            "direction": "I"
-          },
-          "we": {
-            "direction": "I"
-          },
-          "addr_in": {
-            "direction": "I",
-            "left": "31",
-            "right": "0"
-          },
-          "dmem_in": {
-            "direction": "I",
-            "left": "31",
-            "right": "0"
-          },
-          "fpga_switch": {
-            "direction": "I",
-            "left": "15",
-            "right": "0",
-            "parameters": {
-              "LAYERED_METADATA": {
-                "value": "undef",
-                "value_src": "default_prop"
-              }
-            }
-          },
-          "fpga_LED": {
-            "direction": "O",
-            "left": "15",
-            "right": "0"
-          },
-          "dmem_out": {
-            "direction": "O",
-            "left": "31",
-            "right": "0"
-          }
-        }
-      },
       "immext_0": {
         "vlnv": "xilinx.com:module_ref:immext:1.0",
         "xci_name": "design_1_immext_0_0",
@@ -670,6 +606,54 @@
             "right": "0"
           }
         }
+      },
+      "DMem_0": {
+        "vlnv": "xilinx.com:module_ref:DMem:1.0",
+        "xci_name": "design_1_DMem_0_0",
+        "xci_path": "ip\\design_1_DMem_0_0\\design_1_DMem_0_0.xci",
+        "inst_hier_path": "DMem_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "DMem",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I"
+          },
+          "rd": {
+            "direction": "I"
+          },
+          "we": {
+            "direction": "I"
+          },
+          "addr_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "dmem_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "fpga_switch": {
+            "direction": "I",
+            "left": "15",
+            "right": "0"
+          },
+          "fpga_LED": {
+            "direction": "O",
+            "left": "15",
+            "right": "0"
+          },
+          "dmem_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
       }
     },
     "nets": {
@@ -713,8 +697,8 @@
           "pc_0/clk",
           "regfile_0/clk",
           "IMem_0/clk",
-          "DMem_0/clk",
-          "control_unit_0/clk"
+          "control_unit_0/clk",
+          "DMem_0/clk"
         ]
       },
       "const_add4_0_out": {
